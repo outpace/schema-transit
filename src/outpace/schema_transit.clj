@@ -37,6 +37,13 @@
      (tag ~(str primitive))
      (read-handler (constantly ~(symbol primitive)))))
 
+(defn pred-tag [obj]
+  (condp = (:p? obj)
+    integer? (tag "Int")
+    keyword? (tag "Keyword")
+    symbol? (tag "Symbol")
+    nil))
+
 (def write-handlers
   (-> (apply record-write-handlers records)
       (assoc-primitive-write double)
@@ -56,18 +63,7 @@
       (assoc-primitive-write bytes)
       (assoc-primitive-write booleans)
       (assoc schema.core.Predicate
-        (write-handler (fn [obj]
-                         (condp = (:p? obj)
-                           integer? (tag "Int")
-                           keyword? (tag "Keyword")
-                           symbol? (tag "Symbol")
-                           nil))
-                       (fn [obj]
-                         (condp = (:p? obj)
-                           integer? (tag "Int")
-                           keyword? (tag "Keyword")
-                           symbol? (tag "Symbol")
-                           nil))))
+        (write-handler pred-tag pred-tag))
       (assoc Pattern (write-handler (tag "Pattern") str))
       (assoc Class
         (write-handler (tag "Class")
