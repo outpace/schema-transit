@@ -17,82 +17,82 @@
                     :json-verbose
                     {:handlers read-handlers})))
 
-(defn transit [obj]
+(defn roundtrip [obj]
   (let [out (ByteArrayOutputStream.)]
     (transit-write obj out)
     (transit-read (ByteArrayInputStream. (.toByteArray out)))))
 
-(defn transit? [obj]
-  (let [t (transit obj)]
+(defn roundtrip? [obj]
+  (let [t (roundtrip obj)]
     (is (= obj t) t)))
 
 (deftest test-primitive-schemas
-  (is (transit? double))
-  (is (transit? float))
-  (is (transit? long))
-  (is (transit? int))
-  (is (transit? short))
-  (is (transit? char))
-  (is (transit? byte))
-  (is (transit? boolean)))
+  (is (roundtrip? double))
+  (is (roundtrip? float))
+  (is (roundtrip? long))
+  (is (roundtrip? int))
+  (is (roundtrip? short))
+  (is (roundtrip? char))
+  (is (roundtrip? byte))
+  (is (roundtrip? boolean)))
 
 (deftest test-primitive-array-schemas
-  (is (transit? doubles))
-  (is (transit? floats))
-  (is (transit? longs))
-  (is (transit? ints))
-  (is (transit? shorts))
-  (is (transit? chars))
-  (is (transit? bytes))
-  (is (transit? booleans)))
+  (is (roundtrip? doubles))
+  (is (roundtrip? floats))
+  (is (roundtrip? longs))
+  (is (roundtrip? ints))
+  (is (roundtrip? shorts))
+  (is (roundtrip? chars))
+  (is (roundtrip? bytes))
+  (is (roundtrip? booleans)))
 
 (deftest test-cross-platform-schemas
-  (is (transit? s/Any))
-  (is (transit? (s/eq "foo")))
-  (is (transit? (s/enum 'foo 'bar)))
-  (is (transit? (s/pred integer? 'integer?)))
-  (is (transit? (s/pred keyword? 'keyword?)))
-  (is (transit? (s/pred symbol? 'symbol?)))
+  (is (roundtrip? s/Any))
+  (is (roundtrip? (s/eq "foo")))
+  (is (roundtrip? (s/enum 'foo 'bar)))
+  (is (roundtrip? (s/pred integer? 'integer?)))
+  (is (roundtrip? (s/pred keyword? 'keyword?)))
+  (is (roundtrip? (s/pred symbol? 'symbol?)))
   (is (thrown? Exception
                (transit-write (s/pred odd? 'odd?) (ByteArrayOutputStream.))))
-  (let [result (transit #"foo")]
+  (let [result (roundtrip #"foo")]
     (is (instance? Pattern result))
     (is (= "foo" (str result))))
-  (is (transit? s/Str))
-  (is (transit? s/Bool))
-  (is (transit? s/Num))
-  (is (transit? s/Int))
-  (is (transit? s/Keyword))
-  (is (transit? s/Symbol))
-  (is (transit? s/Regex))
-  (is (transit? s/Inst))
-  (is (transit? s/Uuid)))
+  (is (roundtrip? s/Str))
+  (is (roundtrip? s/Bool))
+  (is (roundtrip? s/Num))
+  (is (roundtrip? s/Int))
+  (is (roundtrip? s/Keyword))
+  (is (roundtrip? s/Symbol))
+  (is (roundtrip? s/Regex))
+  (is (roundtrip? s/Inst))
+  (is (roundtrip? s/Uuid)))
 
 (deftest test-class-schema
-  (is (transit? Exception)))
+  (is (roundtrip? Exception)))
 
 (deftest test-composite-schemas
-  (is (transit? (s/maybe s/Str)))
-  (is (transit? (s/named s/Str "foo")))
-  (is (transit? (s/either s/Str s/Int)))
-  (is (transit? (s/both s/Str s/Int))))
+  (is (roundtrip? (s/maybe s/Str)))
+  (is (roundtrip? (s/named s/Str "foo")))
+  (is (roundtrip? (s/either s/Str s/Int)))
+  (is (roundtrip? (s/both s/Str s/Int))))
 
 (deftest test-map-schemas
-  (is (transit? (s/required-key "foo")))
-  (is (transit? (s/optional-key :foo)))
-  (is (transit? (s/map-entry :foo s/Int))))
+  (is (roundtrip? (s/required-key "foo")))
+  (is (roundtrip? (s/optional-key :foo)))
+  (is (roundtrip? (s/map-entry :foo s/Int))))
 
 (deftest test-sequence-schemas
-  (is (transit? (s/one s/Str "string")))
-  (is (transit? (s/optional s/Str "string")))
-  (is (transit? (s/pair s/Int "x" s/Int "y"))))
+  (is (roundtrip? (s/one s/Str "string")))
+  (is (roundtrip? (s/optional s/Str "string")))
+  (is (roundtrip? (s/pair s/Int "x" s/Int "y"))))
 
 (deftest test-record-schemas
-  (is (transit? (s/record schema.core.Record {:klass Class :schema Class}))))
+  (is (roundtrip? (s/record schema.core.Record {:klass Class :schema Class}))))
 
 (deftest test-function-schemas
-  (is (transit? (s/=> [s/Str] s/Str))))
+  (is (roundtrip? (s/=> [s/Str] s/Str))))
 
 (deftest test-isa-schemas
   (derive ::child ::parent)
-  (is (transit? (s/isa ::parent))))
+  (is (roundtrip? (s/isa ::parent))))
