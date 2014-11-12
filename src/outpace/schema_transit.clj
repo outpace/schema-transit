@@ -37,6 +37,14 @@
      (tag ~(str primitive))
      (read-handler (constantly ~(symbol primitive)))))
 
+(def primitives '[double float long int short char byte boolean
+                  doubles floats longs ints shorts chars bytes booleans])
+
+(defmacro assoc-primitives [m op]
+  (list* '-> m
+         (for [primitive primitives]
+           (list op primitive))))
+
 (defn pred-tag [obj]
   (condp = (:p? obj)
     integer? (tag "Int")
@@ -46,22 +54,7 @@
 
 (def write-handlers
   (-> (apply record-write-handlers records)
-      (assoc-primitive-write double)
-      (assoc-primitive-write float)
-      (assoc-primitive-write long)
-      (assoc-primitive-write int)
-      (assoc-primitive-write short)
-      (assoc-primitive-write char)
-      (assoc-primitive-write byte)
-      (assoc-primitive-write boolean)
-      (assoc-primitive-write doubles)
-      (assoc-primitive-write floats)
-      (assoc-primitive-write longs)
-      (assoc-primitive-write ints)
-      (assoc-primitive-write shorts)
-      (assoc-primitive-write chars)
-      (assoc-primitive-write bytes)
-      (assoc-primitive-write booleans)
+      (assoc-primitives assoc-primitive-write)
       (assoc schema.core.Predicate
         (write-handler pred-tag pred-tag))
       (assoc Pattern (write-handler (tag "Pattern") str))
@@ -71,22 +64,7 @@
 
 (def read-handlers
   (-> (apply record-read-handlers records)
-      (assoc-primitive-read double)
-      (assoc-primitive-read float)
-      (assoc-primitive-read long)
-      (assoc-primitive-read int)
-      (assoc-primitive-read short)
-      (assoc-primitive-read char)
-      (assoc-primitive-read byte)
-      (assoc-primitive-read boolean)
-      (assoc-primitive-read doubles)
-      (assoc-primitive-read floats)
-      (assoc-primitive-read longs)
-      (assoc-primitive-read ints)
-      (assoc-primitive-read shorts)
-      (assoc-primitive-read chars)
-      (assoc-primitive-read bytes)
-      (assoc-primitive-read booleans)
+      (assoc-primitives assoc-primitive-read)
       (assoc (tag "Int") (read-handler (constantly s/Int)))
       (assoc (tag "Keyword") (read-handler (constantly s/Keyword)))
       (assoc (tag "Symbol") (read-handler (constantly s/Symbol)))
