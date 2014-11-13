@@ -9,7 +9,7 @@ send it over the wire, store it in a database, etc.
 
 The latest version of schema-transit is:
 
-    [outpace/schema-transit "0.1.0"]
+[![Clojars Project](http://clojars.org/com.outpace/schema-transit/latest-version.svg)](http://clojars.org/com.outpace/schema-transit)
 
 ## Approach
 
