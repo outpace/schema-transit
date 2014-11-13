@@ -41,20 +41,22 @@ The schema-transit write handlers are defined as
 
 You can use these like you would any other transit handlers:
 
-    (require '[cognitect.transit :as t])
-    (require '[outpace.schema-transit :as st])
+```clojure
+(require '[cognitect.transit :as t])
+(require '[outpace.schema-transit :as st])
 
-    (defn transit-write [obj out]
-      (t/write (t/writer out
-                         :json-verbose
-                         {:handlers st/write-handlers})
-               obj))
-    
-    (defn transit-read [in]
-      (t/read (t/reader in
-                        :json-verbose
-                        {:handlers st/read-handlers})))
+(defn transit-write [obj out]
+  (t/write (t/writer out
+                     :json-verbose
+                     {:handlers st/write-handlers})
+           obj))
 
+(defn transit-read [in]
+  (t/read (t/reader in
+                    :json-verbose
+                    {:handlers st/read-handlers})))
+```
+                        
 ## Future
 
 As mentioned several times already, a future goal is to enable transmission of
