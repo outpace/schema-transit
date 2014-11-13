@@ -1,8 +1,8 @@
 # schema-transit
 
 schema-transit is a library that glues together Prismatic's
-[http://github.com/prismatic/schema](Schema) library and Cognitect's
-[http://github.com/cognitect/transit-clj](Transit) library.
+[Schema](http://github.com/prismatic/schema) library and Cognitect's
+[Transit](http://github.com/cognitect/transit-clj) library.
 
 Using schema-transit you can turn a schema into data.  Once it is data you can
 send it over the wire, store it in a database, etc.
