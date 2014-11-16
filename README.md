@@ -13,7 +13,7 @@ The latest version of schema-transit is:
 
 ## Approach
 
-Most of schemas are instances of defrecord types, and transit-clj has support
+Most schemas are instances of defrecord types, and transit-clj has support
 for easily creating read/write handlers for a defrecord type.  However, there
 are other schemas that need some more work to be serializable.  For example, a
 Java class is a valid schema that matches instances of itself.
