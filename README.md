@@ -11,33 +11,15 @@ The latest version of schema-transit is:
 
 [![Clojars Project](http://clojars.org/com.outpace/schema-transit/latest-version.svg)](http://clojars.org/com.outpace/schema-transit)
 
-## Approach
-
-Most schemas are instances of defrecord types, and transit-clj has support
-for easily creating read/write handlers for a defrecord type.  However, there
-are other schemas that need some more work to be serializable.  For example, a
-Java class is a valid schema that matches instances of itself.
-
-### Cross-platform Serialization
-
-Many of the non-record schemas (including the cross-platform schemas: s/Str,
-s/Int, etc.) are serialized as namespaced symbols.  The intention is that they
-can be transmitted across the wire between Clojure and ClojureScript processes.
-
-### Platform Specific Serialization
-
-A Java class is serialized using its name, and when it is deserialized the class
-is found using its class name (in a way that will *not* automatically initialize
-the class).  This would allow sending a class schema between Clojure processes
-(with the appropriate classes available on each classpath), but it would not be
-possible (obviously) to send a class schema between Clojure and ClojureScript
-processes.
-
 ## Usage
 
-The schema-transit write handlers are defined as
-`outpace.schema-transit/write-handlers`, and the read handlers as
-`outpace.schema-transit/read-handlers`.
+The schema-transit cross-platform read/write handlers are defined as
+`outpace.schema-transit/cross-platform-read-handlers` and
+`outpace.schema-transit/cross-platform-write-handlers`, respectively.
+
+The platform specific read/write handlers are defined as
+`outpace.schema-transit/read-handlers` and
+`outpace.schema-transit/write-handlers`, respectively
 
 You can use these like you would any other transit handlers:
 
@@ -56,21 +38,28 @@ You can use these like you would any other transit handlers:
                     :json-verbose
                     {:handlers st/read-handlers})))
 ```
-                        
-## Future
 
-As mentioned several times already, a future goal is to enable transmission of
-schemas between Clojure and ClojureScript processes, but this is not yet
-implemented.
+## Approach
 
-Also, this library is still early stage, and the exact cross-platform
-serialization strategy is still being solidified, so any long term storage of
-schemas (such as in a database) is not recommended unless you are willing to
-deal with migrating the schemas between versions of schema-transit.
+Schemas can be divided into two sets: cross-platform and platform specific.
 
-Once schema-transit reaches 1.0, you will be guaranteed that the format will not
-change except possibly between major releases (and even then we will attempt to
-maintain some kind of optional backwards compatibility).
+The cross-platform schemas can be serialized, deserialized, and transmitted
+between Clojure and ClojureScript.  The following leaf schemas are currently
+considered cross-platform: s/Any, s/Int, s/Keyword, s/Symbol, s/String, s/Bool,
+s/Num, s/Regex, s/Inst, s/Uuid.  The following composite schemas are
+cross-platform if their components are also cross-platform: s/eq, s/maybe,
+s/named, s/either, s/both, maps, sets, vectors, s/required-key, s/optional-key,
+s/map-entry, s/one, function schema, and s/pair.
+
+The platform specific schemas include the cross-platform schemas, and additional
+schemas that can safely be serialized/deserialized but cannot be transmitted
+between Clojure and ClojureScript.  Clojure's platform specific schemas are
+primitive schemas, a compiled regular expression, and a Java Class.  In the case
+of a Java class it is serialized to its fully qualified class name.  When
+deserialized a Java class must exist and have already been initialized;
+schema-transit finds classes using Class/forName but in a way that will *not*
+initialize a class.  On the ClojureScript side, the only platform specific
+schema is a regular expression.
 
 ## License
 
