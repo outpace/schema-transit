@@ -1,4 +1,4 @@
-(defproject com.outpace/schema-transit "0.3.0-SNAPSHOT"
+(defproject com.outpace/schema-transit "0.2.1"
   :description "A library for serializing Prismatic Schema definitions with
   Transit."
   :url "http://github.com/outpace/schema-transit"
