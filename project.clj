@@ -7,7 +7,7 @@
   :deploy-repositories [["releases" :clojars]]
   :dependencies [[com.cognitect/transit-clj "0.8.259"]
                  [com.cognitect/transit-cljs "0.8.192"]
-                 [prismatic/schema "0.3.0"]]
+                 [prismatic/schema "0.3.7"]]
   :plugins [[com.cemerick/clojurescript.test "0.3.3"]
             [lein-cljsbuild "1.0.3"]]
   :source-paths ["src/clj"]

@@ -33,7 +33,8 @@
                                 Maybe NamedSchema Either Both RequiredKey
                                 OptionalKey MapEntry One FnSchema Isa)
     schema.core.Predicate (write-handler pred-tag pred-tag)
-    js/Function (write-handler js-type-tag js-type-tag)))
+    js/Function (write-handler js-type-tag js-type-tag)
+    (type s/Regex) (write-handler js-type-tag js-type-tag)))
 
 (def
   ^{:doc "Transit write handlers for the set of schemas that can be
