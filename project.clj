@@ -10,7 +10,7 @@
                  [prismatic/schema "0.3.7"]]
   :plugins [[com.cemerick/clojurescript.test "0.3.3"]
             [lein-cljsbuild "1.0.3"]]
-  :source-paths ["src/clj"]
+  :source-paths ["src/clj" "src/cljs"]
   :test-paths ["test/clj"]
   :cljsbuild {:test-commands {"unit" ["node" :node-runner
                                       "this.literal_js_was_evaluated=true"
